@@ -1039,9 +1039,15 @@ class UserDefinedType(Column):
             return
 
         copied_value = deepcopy(value)
+
         for name, field in self.user_type._fields.items():
-            if copied_value[name] is not None or isinstance(field, BaseContainerColumn):
-                copied_value[name] = field.to_python(copied_value[name])
+            try:
+                if copied_value[name] is not None or isinstance(field, BaseContainerColumn):
+                    copied_value[name] = field.to_python(copied_value[name])
+            except TypeError as e:
+                dict_value = copied_value._asdict()
+                if dict_value.get(name, None) is not None or isinstance(field, BaseContainerColumn):
+                    dict_value[name] = field.to_python(dict_value[name])
 
         return copied_value
 
