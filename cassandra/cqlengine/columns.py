@@ -1045,9 +1045,7 @@ class UserDefinedType(Column):
                 if copied_value[name] is not None or isinstance(field, BaseContainerColumn):
                     copied_value[name] = field.to_python(copied_value[name])
             except TypeError as e:
-                dict_value = copied_value._asdict()
-                if dict_value.get(name, None) is not None or isinstance(field, BaseContainerColumn):
-                    dict_value[name] = field.to_python(dict_value[name])
+                pass
 
         return copied_value
 
